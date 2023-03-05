@@ -1,0 +1,132 @@
+select *
+from "SALES_TABLES";
+
+--PROFIT ANALYSIS
+--question 1
+select sum("PROFIT")
+from 
+(select *,
+case when "COUNTRIES" in ('Nigeria','Ghana') then 'Anlophone'
+else 'Francophone' end as "TERRITORY"
+from "SALES_TABLES") as "table_one";
+
+--question 2
+select "TERRITORY", sum("PROFIT") as "profit_sum"
+from
+(select *,
+case when "COUNTRIES" in ('Nigeria','Ghana') then 'Anlophone'
+else 'Francophone' end as "TERRITORY"
+from "SALES_TABLES") as "table_one"
+group by "TERRITORY"
+order by "profit_sum";
+
+--question 3
+select "COUNTRIES", sum("PROFIT") as "country_sum"
+from "SALES_TABLES"
+where "YEARS" in (2019)
+group by "COUNTRIES"
+order by "country_sum" desc;
+
+--question 4
+select "YEARS", sum("PROFIT") as "yearly_profit"
+from "SALES_TABLES"
+group by "YEARS"
+order by "yearly_profit";
+
+--question 5
+select "MONTHS", min("PROFIT") as "monthly_sum"
+from "SALES_TABLES"
+group by "MONTHS"
+order by "monthly_sum" desc;
+
+--question 6
+select "YEARS", "MONTHS",min("PROFIT") as "min_profit"
+from "SALES_TABLES"
+where "MONTHS" = 'December' and "YEARS" = 2018
+group by "MONTHS", "YEARS";
+
+
+--question 7
+select "MONTHS", round((sum("PROFIT")/sum("COST"))*100,3) as "percentage_profit"
+from "SALES_TABLES"
+where "YEARS" in (2019) 
+group by "MONTHS"
+order by "percentage_profit" desc;
+
+--BRAND ANALYSIS
+--question 1
+select "YEARS", "BRANDS", sum("QUANTITY") as "quantity_sum"
+from
+(select *,
+case when "COUNTRIES" in ('Nigeria','Ghana') then 'Anlophone'
+else 'Francophone' end as "TERRITORY"
+from "SALES_TABLES") as "table_one"
+where "YEARS" in (2018, 2019) and "TERRITORY" = 'Francophone'
+group by "YEARS","BRANDS","COUNTRIES"
+order by "quantity_sum" desc;
+
+--question 2
+select "BRANDS", sum ("QUANTITY") as "sum_brands"
+from "SALES_TABLES"
+where "COUNTRIES" = 'Ghana'
+group by "BRANDS"
+order by "sum_brands" desc;
+
+
+--question 3
+select "BRANDS", sum("QUANTITY") as "QUANTITIES", "YEARS"
+from "SALES_TABLES"
+where "COUNTRIES" = 'Nigeria'
+and "BRANDS" not in ('beta malt', 'grand malt')
+group by "BRANDS","YEARS"
+order by "QUANTITIES", "YEARS" desc;
+
+--question 4
+select "BRANDS", sum("QUANTITY") as "sum_quantity"
+from
+(select *,
+case when "COUNTRIES" in ('Nigeria','Ghana') then 'Anlophone'
+else 'Francophone' end as "TERRITORY"
+from "SALES_TABLES") as "table_one" 
+where "TERRITORY" in ('Anglophone')
+and "BRANDS" like '%malt' and "YEARS" between 2018 and 2019
+group by "BRANDS"
+order by "sum_quantity" desc;
+
+--question 5
+select "BRANDS", sum("QUANTITY") as "total_sales"
+from "SALES_TABLES"
+where "YEARS" = (2019) and "COUNTRIES" = 'Nigeria'
+group by "BRANDS"
+order by "total_sales" desc;
+
+--question 6
+select "BRANDS",sum ("QUANTITY") AS "quantity_sum"
+from "SALES_TABLES"
+Where "REGION" = 'southsouth' and "COUNTRIES" = 'Nigeria'
+group by "BRANDS"
+order by "quantity_sum" desc;
+
+
+--question 7
+select "BRANDS", sum("QUANTITY") as "QUANTITIES"
+from "SALES_TABLES"
+where "COUNTRIES" = 'Nigeria'
+and "BRANDS" not in ('beta malt', 'grand malt')
+group by "BRANDS"
+order by "QUANTITIES" desc;
+
+--question 8
+select ("BRANDS"),("REGION"), sum ("QUANTITY") as "quantity_sum"
+from "SALES_TABLES"
+where "COUNTRIES" = 'Nigeria' and "BRANDS" = 'budweiser'
+group by "BRANDS", "REGION"
+order by "quantity_sum" desc;
+
+--queestion 9
+select ("BRANDS"),("REGION"), sum ("QUANTITY") as "quantity_sum"
+from "SALES_TABLES"
+where "COUNTRIES" = 'Nigeria' and "BRANDS" = 'budweiser' and "YEARS" = (2019)
+group by "BRANDS", "REGION"
+order by "quantity_sum" desc;
+
